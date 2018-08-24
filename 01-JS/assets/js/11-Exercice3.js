@@ -48,7 +48,8 @@ var PremierTrimestre = [
         moyenne: {
             francais: 4,
             math: 6,
-            physique: 18
+            physique: 18,
+            musique: 14
         }
     },
     {
@@ -95,25 +96,47 @@ var PremierTrimestre = [
         }
     }
 ];
-// PremierTrimestre.forEach(function (y) { document.write(y); }); 
+
+// -- Les Flémards.js  
+w = e => document.write(e);
+l = e => console.log(e);
+
+// -- 1. Je souhaite afficher la liste de mes étudiants.
+w('<ol>');
+for (let i = 0; i < PremierTrimestre.length; i++) {
+
+    // -- Vérification dans la console
+    console.log(PremierTrimestre[i]);
+
+    // -- 2. Afficher les étudiants sur ma page
+    let etudiant = PremierTrimestre[i];
+    w('<li>');
+
+    w(etudiant.prenom + " " + etudiant.nom);
+
+    var nombreDeMatiere = 0, sommeDesNotes = 0;
+
+    // -- 3. Afficher la moyenne obtenu par mon etudiant a chaque matiere
+    w('<ul>');
+    for (let matiere in etudiant.moyenne) {
 
 
+        nombreDeMatiere++;
+        sommeDesNotes += etudiant.moyenne[matiere];
 
-document.write('<ol>')
+        // -- Affichage sur la page
+        w('<li>');
+        w(matiere + " : " + etudiant.moyenne[matiere]);
+        w('</li>');
 
-for(var i = 0; i < PremierTrimestre.length; i++){
-   
-    document.write(PremierTrimestre[i])
+    }
+    w('<li>');
+    w('<strong>Moyenne Générale :</strong>' + (sommeDesNotes / nombreDeMatiere).toFixed(2));
+    w('</li>');
 
-    document.write('<li>' + PremierTrimestre[i].nom + ' ' + PremierTrimestre[i].prenom + '</li>');
+    w('</ul>');
+    l('------');
 
-    for (let matiere in PremierTrimestre[i].moyenne) {
-        document.write(matiere +'<br>');
-    } 
-    
-
-    document.write('------------' + '<br>')
-    
+    w('</li><br>');
 }
-
-document.write('</ol>')
+w('</ol>');
