@@ -123,7 +123,7 @@ Lors de la saisie du Pseudo, vous devrez afficher en temps réel dans le titre i
     /* *--------------🌝 🌛 🌜 🌚 🌕 🌖 🌗 🌘 🌑 🌒 🌓 🌔 🌙 --------------* */
 
         // valider la presence d'elements dans la bdd
-
+/*
   function validateFormOnSubmit(contact) {
         reason = "";
         reason += validateName(contact.pseudo);
@@ -138,92 +138,143 @@ Lors de la saisie du Pseudo, vous devrez afficher en temps réel dans le titre i
         } else {
             return false;
         }
-    }
+    }*/
 
     // recuperer les elements de l'html pour afficher les elements d'erreurs
-    var pseudo = getElementById('pseudo')
-    var age = getElementById('age')
-    var mdp = getElementById('mdp')
+    const pseudo              = getElementById('pseudo')
+    const age                 = getElementById('age')
+    const mdp                 = getElementById('mdp')
+    const email               = getElementById('email')
+    const submit              = getElementById('submit')
+    const Bienvenue           = getElementById('Bienvenue')
+    const InscriptionForm     = getElementById('InscriptionForm')
 
-        var pseudoError = getElementsByClassName('pseudoError')
-        var ageError = getElementsByClassName('ageError')
-        var mdpError = getElementsByClassName('mdpError')
+        const pseudoError = getElementsByClassName('pseudoError')[0]
+        const ageError    = getElementsByClassName('ageError')[0]
+        const mdpError    = getElementsByClassName('mdpError')
+
+    pseudo.addEventListener('input', function () {
+
+        for (let i=0; i< membres.length ; i++){
+            if(pseudo.value === membres[i].pseudo){
+                pseudoError.style.display ="block";
+                submit.disabled = true;
+                break
+            }else{
+                pseudoError.style.display = "none";
+                submit.disabled = false;
+                Bienvenue.textContent = 'Bienvenue'+ pseudo.value
+            }
+
+        }
+
+        const majoriteLegale = 18;
+        age.addEventListener('change', function(){
+            if (age.value >= majoriteLegale){
+                ageError.style.disabled ="none"
+                submit.disabled = false;
+            } else {
+                ageError.style.disabled = "block"
+                submit.disabled = true;
+            }
+        });
+
+    });
+
+    InscriptionForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        // creer un objet membre a ajouter au tableau
+        const membre ={
+            'pseudo': pseudo.value,
+            'age': age.value,
+            'email': email.value,
+            'mdp': mdp.value,
+        }
+
+        membres.push(membre)
+        console.log(membres)
+
+        const p= document.createElement('p');
+        p.innerHTML ="Merci" + pseudo.value +"!<b> tu es maintenant inscrit.</b><br><br><u>voici la liste de nos membres :</u>";
+        document.body.appendChild(p);
+        
+        const ul = document.createElement('ul');
+        for(let i=0; i<membres.length; i++)
+
+        const li = document.createElement('li');
+        li.textContent = membres[i].pseudo +" : "+membres[i].age+" ans";
+        ul.appendChild(li)
+    })
 
     // validate required fields
-    function validateName(pseudo) {
-        var error = "";
+            /* function validateName(pseudo) {
+                var error = "";
 
-        if (pseudo.value.length == 0) {
-            pseudo.style.background = 'Red';
-            document.pseudoError;
-            var error = "1";
-        } else {
-            name.style.background = 'White';
-            document.pseudoError;
-        }
-        return error;
-    }
+                if (pseudo.value.length == 0) {
+                    pseudo.style.background = 'Red';
+                    document.pseudoError;
+                    var error = "1";
+                } else {
+                    name.style.background = 'White';
+                    document.pseudoError;
+                }
+                return error;
+            } */
 
     // validate email 
-    function trim(s) {
-        return s.replace(/^\s+|\s+$/, '');
-    }
+                /* function trim(s) {
+                    return s.replace(/^\s+|\s+$/, '');
+                }
 
-    function validateEmail(email) {
-        var error = "";
-        var temail = trim(email.value); // value of field with whitespace trimmed off
-        var emailFilter = /^[^@]+@[^@.]+\.[^@]*\w\w$/;
-        var illegalChars = /[\(\)\<\>\,\;\:\\\"\[\]]/;
+                function validateEmail(email) {
+                    var error = "";
+                    var temail = trim(email.value); // value of field with whitespace trimmed off
+                    var emailFilter = /^[^@]+@[^@.]+\.[^@]*\w\w$/;
+                    var illegalChars = /[\(\)\<\>\,\;\:\\\"\[\]]/;
 
-        if (email.value == "") {
-            email.style.background = 'Red';
-            document.getElementById('email-error').innerHTML = "veuillez ecrire un email.";
-            var error = "2";
-        } else if (!emailFilter.test(temail)) { //test email for illegal characters
-            email.style.background = 'Red';
-            document.getElementById('email-error').innerHTML = "veuillez saisire un email valide.";
-            var error = "3";
-        } else if (email.value.match(illegalChars)) {
-            email.style.background = 'Red';
-            var error = "4";
-            document.getElementById('email-error').innerHTML = "Email contient des caracteres iinvalides.";
-        } else {
-            email.style.background = 'White';
-            document.getElementById('email-error').innerHTML = '';
-        }
-        return error;
-    }
+                    if (email.value == "") {
+                        email.style.background = 'Red';
+                        document.getElementById('email-error').innerHTML = "veuillez ecrire un email.";
+                        
+                    } else if (!emailFilter.test(temail)) { //test email for illegal characters
+                        email.style.background = 'Red';
+                        document.getElementById('email-error').innerHTML = "veuillez saisire un email valide.";
+                    
+                    } else if (email.value.match(illegalChars)) {
+                        email.style.background = 'Red';
+                        document.getElementById('email-error').innerHTML = "Email contient des caracteres iinvalides.";
+                    } else {
+                        email.style.background = 'White';
+                        document.getElementById('email-error').innerHTML = '';
+                    }
+                    return error;
+                }
 
-   
-    function validateNumber(age) {
-        var num = document.forms["contact"]["age"];
-        var y = age.value;
-        if (!isNaN(y)) {
+            
+                function validateNumber(age) {
+                    var num = document.forms["contact"]["age"];
+                    var y = age.value;
+                    if (!isNaN(y)) {
 
-            //alert('va');
+                        //alert('va');
 
-            if (y < 0 || y > 17) {
-                //Wrong
-                age.style.background = 'Red';
-                document.ageError;
-                var error = "17";
-            } else {
-                //Correct
-                age.style.background = 'White';
-                document.getElementById("age").innerHTML = "";
-            }
-            return error;
-        } else {
-            document.getElementById("age").innerHTML = "ça doit etre un nombre.";
-            var error = "3";
-        }
-        return error;
-    }
-
+                        if (y < 0 || y > 17) {
+                            //Wrong
+                            age.style.background = 'Red';
+                            document.ageError;
+                            var error = "17";
+                        } else {
+                            //Correct
+                            age.style.background = 'White';
+                            document.getElementById("age").innerHTML = "";
+                        }
+                        return error;
+                    } else {
+                        document.getElementById("age").innerHTML = "ça doit etre un nombre.";
+                        var error = "3";
+                    }
+                    return error;
+                } */
 
 
-    </script>
 
-</body>
-
-</html>
