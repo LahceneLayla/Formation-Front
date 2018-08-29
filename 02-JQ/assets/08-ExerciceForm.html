@@ -59,7 +59,7 @@
         contacts.
         
         3. Vous afficherez ensuite l'ensemble des contacts
-        du tableau sur votre page HTML à la suite de votre
+        du tableau (js) sur votre page HTML à la suite de votre
         formulaire. (Vous utiliserez une <table>)
         
         4. BONUS : Utilisation de Notification, Local Storage et Bootstrap.
@@ -89,6 +89,9 @@
                             <label for="nom" class="col-md-4 control-label">Nom</label>
                             <div class="col-md-8">
                                 <input type="text" name="nom" id="nom" class="form-control" placeholder="Nom">
+<!--                                                         <div class="invalid-feedback">
+                                                            Vérifiez votre nom
+                                                        </div> -->
                             </div>
                         </div>
 
@@ -97,6 +100,9 @@
                             <label for="prenom" class="col-md-4 control-label">Prénom</label>
                             <div class="col-md-8">
                                 <input type="text" name="prenom" id="prenom" class="form-control" placeholder="Prénom">
+<!--                                                         <div class="invalid-feedback">
+                                                            Vérifiez votre prenom
+                                                        </div> -->
                             </div>
                         </div>
 
@@ -105,6 +111,9 @@
                             <label for="email" class="col-md-4 control-label">Email</label>
                             <div class="col-md-8">
                                 <input type="email" name="email" id="email" class="form-control" placeholder="Email">
+<!--                                                         <div class="invalid-feedback">
+                                                            Vérifiez votre email
+                                                        </div> -->
                             </div>
                         </div>
 
@@ -113,17 +122,18 @@
                             <label for="tel" class="col-md-4 control-label">Tel</label>
                             <div class="col-md-8">
                                 <input type="tel" name="tel" id="tel" class="form-control" placeholder="Téléphone">
+<!--                                                         <div class="invalid-feedback">
+                                                            Vérifiez votre téléphone
+                                                        </div> -->
                             </div>
                         </div>
 
                         <!-- Bouton d'Envoi -->
-                        <div id="btnSave">
                         <div class="form-group">
                             <div class="col-xs-9 col-xs-offset-3">
                                 <button type="submit" class="btn btn-primary" value="Ajouter le Contact">Ajouter le Contact</button>
                             </div>
                         </div>
-                    </div>
 
                     </fieldset>
                 </form>
@@ -157,6 +167,8 @@
 
     </main>
 
+
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous"></script>
@@ -166,64 +178,212 @@
         crossorigin="anonymous"></script>
 
     <!-- contact.custom.js -->
-    <script src="assets/js/08.contact.js"></script>
-
+    <!-- <script src="assets/js/08.contact.js"></script> -->
     <script>
 
-         $('#contact').submit(function (e) {
-
-                e.preventDefault();
-
-                $('#contact .is-invalid').removeClass('is-invalid');
-                $('#contact .is-valid').removeClass('is-valid');
-
-                const nom = $('#nom');
-                const prenom = $('#prenom');
-                const email = $('#email');
-                const tel = $('#tel');
-                const btnSave = $('#btnSave');
-                const LesContacts = $('#LesContacts');
-                
-         })
-
-         $(".GetValues").click(function () {
-                var test1 = $(this).closest(".test1").find("input:text").map(function () {
-
-                    return $(this).val();
-
-                });
-
-                console.log(test1)
-
-            })
-    /*
-    $(document).ready(function () {
-            $("table td:nth-child(1) :input").each(function (index) {
-
-                var rowDate = $(this).val()
-                var rowPoints = $("table td:nth-child(2) :input").eq(index).val()
-
-                if (rowDate === "" && rowPoints === "") {
-                    //both are empty
-                    console.log(index + " : true")
-                } else if (rowDate !== "" && rowPoints !== "") {
-                    //both have values
-                    console.log(index + " : true")
-                } else {
-                    //one is empty and the other have value
-                    console.log(index + " : false")
+        // -- 1- Initialiser jQuery (DOM READY)
+            $(function () {
+                // -- 2- Déclaration d'un tableau pour stocker les contacts
+                    var CollectionDeMesContacts = []
+                /**
+                 * -- 3- FONCTIONS
+                 * 1- valider une adresse mail
+                 * */
+                 function validateEmail(email) {
+                    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    return re.test(String(email).toLowerCase());
                 }
-            });
+
+                //  * 2- valider un n° de téléphone
+                 var validateTel = tel => {
+                    var telReg = new RegExp("(0|\\+33|0033)[1-9][0-9]{8}");
+                    return telReg.test(tel);
+                }
+
+
+                /**
+                 * -- 4- TRAITEMENT DU FORMULAIRE
+                 */
+                // -- 5- Détecter l'envoi du formulaire (tout le travail de vérification
+                // des champs du formulaire se fait dans une fonction .on('submit'))
+                $('#contact').on('submit', function (e) {
+                    // -- 6- stopper la redirection de la page
+                    e.preventDefault();
+                    // -- 7- récupérer les champs pour en vérifier les valeurs
+                    let prenom, nom, email, tel;
+                    nom     =$('#nom');
+                    prenom  = $('#prenom');
+                    email   = $('#email');
+                    tel     = $('#tel');
+
+                    // -- 8- création d'une variable de vérification (booléen)
+                    let MesInformationsSontValides = true;
+
+                    // -- 9- vérification des champs
+                            // -- 9.1- le prénom (longueur)
+                                if(prenom.val().length === 0){
+                                    // si le champ n'est pas remplis
+                                    MesInformationsSontValides = false;
+                                    // le champs n'est pas valide
+                                    }
+
+                            // -- 9.2- le nom (longueur)
+                                if (nom.val().length === 0) {
+                                // si le champ n'est pas remplis
+                                MesInformationsSontValides = false;
+                                // le champs n'est pas valide
+                                }
+
+                            // -- 9.3- le téléphone (fonction)
+                                if(!validateTel(tel.val())){
+                                    // si l'utilisateur a saisie des caractères non conformes a ce qui est attendu
+                                    MesInformationsSontValides = false;
+                                }
+
+                            // -- 9.4- le mail (fonction)
+                                if (!validateEmail(email.val())) {
+                                // si l'utilisateur a saisie des caractères non conformes a ce qui est attendu
+                                MesInformationsSontValides = false;
+                                }
+
+                    // -- 10- si les champs sont tous valides
+                    if(MesInformationsSontValides){
+
+                        // -- 10.1- préparer le contact (objet)
+                            let contact = {
+                                // indice / cle //valeur
+                                nom     : nom.val(),
+                                prenom  : prenom.val(),
+                                email   : email.val(),
+                                tel     : tel.val(),
+                            };
+                                // console.log(contact)
+
+                        // -- 10.2- vérification si le contact existe déjà (variable + for)
+                                let estPresent = false;
+                                // -- 10.2.1- si le contacte est present
+                                    // si l'utilisateur existe déjà
+                                    for(let i=0; i < CollectionDeMesContacts.length; i++){
+                                        if(contact.email === CollectionDeMesContacts[i].email){
+                                            estPresent = true;
+                                            break; //je force la sortie de la boucle dès qu'il trouve correspondance
+                                        }
+                                    }
+                                    console.log(estPresent);
+                     
+                        // -- 10.3- si le contact est absent
+                                    if(!estPresent){                                  
+                            // -- 10.3.1- ajouter au tableau des contacts
+                                    CollectionDeMesContacts.push(contact);
+                            // -- 10.3.2- mettre à jour l'affichage html
+                            $('.aucuncontact').hide();
+                            $(`<tr>
+                                <td>${contact.nom}
+                                </td><td>${contact.prenom}</td>
+                                <td>${contact.email}</td>
+                                <td>${contact.tel}</td>
+                                </tr>`).appendTo($('#LesContacts > tbody'));
+                            //-- 10.3.3- reinitialiser le formulaire
+                                $('#contact')[0].reset();
+                                $('#contact')[0].get(0).reset();
+                                $('#contact').trigger('reset');
+                                $('#contact .form-control').val('');
+                                document.getElementById('contact').reset();
+
+                                //--10.3.4- afficher un message
+                                $('.alert-contact').fadeIn().delay(4000).faceOut();
+                        }else{
+                            // --10.3.5- alert si le contact est present
+                            alert('ATTENTION ! \n tu es déjà inscrit !')
+                            $('#contact')[0].get(0).reset();
+                        }
+                    }else{
+                        // alert utilisateur si un champs est mal renseigné
+                        alert('Attention \n veuillez renseigner tous les champs.');
+                        // \n retourne a la ligne.
+                    }
+
+
+                });  // -- Fin de on.('submit')
+            }); // -- Fin de jQuery Ready
+
+
+
+        /* Valider son email*/
+/*         function validateEmail(email) {
+            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        } */
+        /**
+         * Valider son numéro de téléphone en FR
+         */
+/*         var validateTel = tel => {
+            var telReg = new RegExp("(0|\\+33|0033)[1-9][0-9]{8}");
+            return telReg.test(tel);
+        }
+        $('#contact').submit(function (e) {
+            e.preventDefault();
+            $('#contact .is-invalid').removeClass('is-invalid');
+            $('#contact .is-valid').removeClass('is-valid');
+            $('#contact .alert-danger').remove();
+            const nom = $('#nom');
+            const prenom = $('#prenom');
+            const email = $('#email');
+            const tel = $('#tel'); */
+            // -- Validation du champ "nom"
+/*             if (nom.val().length === 0) {
+                nom.addClass('is-invalid');
+            } else {
+                nom.addClass('is-valid');
+            } */
+            // -- Validation du champ "prenom"
+/*             if (prenom.val().length === 0) {
+                prenom.addClass('is-invalid');
+            } else {
+                nom.addClass('is-valid');
+            } */
+
+            // -- Validation du champ "email"
+/*             if (!validateEmail(email.val())) {
+                email.addClass('is-invalid');
+            } else {
+                nom.addClass('is-valid');
+            } */
+            // -- Validation du champ "tel"
+/*             if (!validateTel(tel.val())) {
+                tel.addClass('is-invalid');
+            }
+
         }); */
 
-    // $('#btnSave').click(function () {
-    //         $('#LesContacts tr').each(function () {
-    //             var keval = $(this).find(".keyvalue input").val();
-    //             console.log(keval);
-    //         });
-    //     });
-    
+        //    function pushData() {
+                // get value from the input text
+/*                 var nom = document.getElementById('nom').value;
+                var prenom = document.getElementById('prenom').value;
+                var email = document.getElementById('email').value;
+                var tel = document.getElementById('tel').value;
+
+                LesContacts = [];  */
+
+                // append data to the array
+/*                 LesContacts.push(nom);
+                LesContacts.push(prenom);
+                LesContacts.push(email);
+                LesContacts.push(tel);
+
+                var pval = ""; */
+
+                // for (i = 0; i < LesContacts.length; i++) {
+                //     pval = pval + LesContacts[i] + "<br/>";
+                // }
+
+                // display array data
+            //     document.getElementById('pText').innerHTML = pval;
+            // }
+
+
     </script>
+
 
 </body>
 
