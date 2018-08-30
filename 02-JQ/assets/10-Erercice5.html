@@ -94,11 +94,10 @@
          <script>
             //  chercher l'api
                 $.getJSON('https://jsonplaceholder.typicode.com/posts', function (data) {
-                    // boucle de l'information dans la form
-                for(var i = 0; i < 10; i++){
-
-                    // ecriture de la form
-                    $(`
+                    // boucle de l'information dans la form/ parcourir le tableau
+                /* for(var i = 0; i > 9; i++){ */
+                $.each(data, function(i, data){
+                     $(`
                     <section>
                         <header>
                         <h1>${data[i].title}</h1>
@@ -107,9 +106,29 @@
                             ${data[i].body}
                         </article>
                         </section>
-                    `).appendTo('body');  // inserer la forme html souhaitable dans l'html
+                    `).appendTo('main');
 
-                }
+                })
+
+                $('markJS').on('input', function(){
+
+                    const keyword = $(this).val();
+                    
+                })
+
+                    // ecriture de la form
+                   /*  $(`
+                    <section>
+                        <header>
+                        <h1>${data[i].title}</h1>
+                        </header>
+                            <article>
+                            ${data[i].body}
+                        </article>
+                        </section>
+                    `).appendTo('body');  */ // inserer la forme html souhaitable dans l'html
+
+                // }
 
                 // $("#markJS").markJS({
                 //         mark: true
