@@ -1,0 +1,65 @@
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.container-fluid{
+padding: 0;
+    width: 100%;
+}
+h1, h2, h5 {
+    font-family: 'Merienda', cursive;
+}
+h1{
+    padding-left: 10%;
+    text-shadow: #B9CDFF;
+}
+h5{
+    color:#2F4073 ;
+}
+.bg-no-overlay {
+    background: url("./img/background.jpg");
+    background-repeat: repeat-x;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    color: #fff;
+    height: 350px;
+    width: 100%;
+    padding-top: 50px;
+    font-family: 'Merienda', cursive;
+}
+
+.carousel {
+float: right;
+  width:80%px;
+  height:70%;
+}
+/* style de l'indicateur du carousel */
+.carousel-indicators li {
+    border-radius: 12px;
+    width: 20px;
+    height: 20px;
+    /* background-color: #404040; */
+}
+
+/* Style du footer */
+.page-footer{
+    /* width: 100em; */
+    padding-left: 5%;
+    padding-right: 10%;
+    background:#dedede ;
+}
+.page-footer img:hover{ /* changement couleur hover tete de chat*/
+    background-color: #061339;
+}
+.footer-copyright p{ /* style copyright footer*/
+    background-color:#061339; 
+    color: #fff; 
+    padding-left: 5%;
+    padding-right: 10%;
+
+}
+/* fin style footer */
