@@ -1,0 +1,23 @@
+page-home {
+  $grey: grey;
+  .done + .item-inner > .input-wrapper{
+    color: $grey;
+    text-decoration: line-through;
+  }
+  .task-nb{
+    font-size: 3em;
+    font-weight: bold;
+  }
+  ion-footer{
+    box-shadow: 0px 0px 8px #488aff;
+  }
+  .ion-calendar{
+    .ion-icon{
+      font-size: 2em;
+      color: darken(#f25022, 8%);
+    }
+  }
+  .input-cover{
+    position: static;
+  }
+}

@@ -1,0 +1,45 @@
+<div class="container p-0">
+  <!--header-->
+  <header>
+    <nav class="navbar navbar-dark bg-dark">
+      <span class="navbar-brand mb-0 h1">
+        Mes tâches à faire
+      </span>
+    </nav>
+  </header>
+
+  <!--todoliste-->
+  <div class="row m-0">
+    <div class="col">
+      <div class="todolist not-done">
+        <h1>A faire</h1>
+        <hr>
+        <ul id="sortable" class="list-unstyled">
+          <li class="ui-state-default" *ngFor="let task of tasks | taskFilter : false">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox">
+                {{task.name}}
+              </label>
+            </div>
+          </li>
+        </ul>
+      </div> <!-- fin todolist-->
+    </div> <!-- fin col-->
+    <div class="col todo-right">
+      <div class="todolist">
+        <h1>Terminées</h1>
+        <hr>
+        <ul class="done-items" class="list-unstyled">
+          <li>
+            Tâche 6
+            <button type="button" class="close">
+              <span>&times;</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div> <!--fin col -->
+  </div> <!-- fin row-->
+</div> <!--fin container -->
+
